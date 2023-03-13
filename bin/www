@@ -77,6 +77,7 @@ function onError(error) {
   }
 }
 
+
 /**
  * Event listener for HTTP server "listening" event.
  */
@@ -105,13 +106,52 @@ io.on('connection', (socket) => {
       // (cpp code parses file for relevant data)
       // ... ??
       // cool simulation
-    exec("test", (error, stdout, stderr) => {
-      if (error == null) {
-        socket.emit('data', {'data': stdout});
-      }
-      console.log(error);
-      console.log(stdout);
-      console.log(stderr);
+    // exec("test", (error, stdout, stderr) => {
+    //   if (error == null) {
+    //     socket.emit('data', {'data': stdout});
+    //   }
+    //   console.log(error);
+    //   console.log(stdout);
+    //   console.log(stderr);
+    // });
+
+    var spawn = require('child_process').spawn;
+    console.log("spawning...");
+    var child = spawn('test');
+
+    // You can also use a variable to save the output 
+    // for when the script closes later
+    var scriptOutput = "";
+
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', function(data) {
+        //Here is where the output goes
+
+        console.log('stdout: ' + data);
+
+        data = data.toString();
+
+        socket.emit('data', {'data': data});
+
+        scriptOutput += data;
+    });
+
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', function(data) {
+        //Here is where the error output goes
+
+        console.log('stderr: ' + data);
+
+        data = data.toString();
+        scriptOutput += data;
+    });
+
+    child.on('close', function(code) {
+        //Here you can get the exit code of the script
+
+        console.log('closing code: ' + code);
+
+        console.log('Full output of script: ', scriptOutput);
     });
   });
 });
