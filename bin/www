@@ -116,8 +116,7 @@ io.on('connection', (socket) => {
     // });
 
     var spawn = require('child_process').spawn;
-    console.log("spawning...");
-    var child = spawn('test');
+    var child = spawn('test'); // The argument here is the executable we want to run
 
     // You can also use a variable to save the output 
     // for when the script closes later
