@@ -97,26 +97,12 @@ function onListening() {
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-const { exec } = require("child_process");
+const { exec } = require("child_process"); // needed to run compiled C++ code
 
 io.on('connection', (socket) => {
-  socket.on('startSimulation', () => {
-    // write data to a file
-    // run cpp executable with file
-      // (cpp code parses file for relevant data)
-      // ... ??
-      // cool simulation
-    // exec("test", (error, stdout, stderr) => {
-    //   if (error == null) {
-    //     socket.emit('data', {'data': stdout});
-    //   }
-    //   console.log(error);
-    //   console.log(stdout);
-    //   console.log(stderr);
-    // });
-
+socket.on('startSimulation', () => {
     var spawn = require('child_process').spawn;
-    var child = spawn('test'); // The argument here is the executable we want to run
+    var child = spawn('test'); // the executable we want to run
 
     // You can also use a variable to save the output 
     // for when the script closes later
@@ -124,13 +110,11 @@ io.on('connection', (socket) => {
 
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', function(data) {
-        //Here is where the output goes
-
-        console.log('stdout: ' + data);
-
         data = data.toString();
 
-        socket.emit('data', {'data': data});
+        let jsonData = convertToJSON(data);
+
+        socket.emit('data', jsonData);
 
         scriptOutput += data;
     });
@@ -154,3 +138,31 @@ io.on('connection', (socket) => {
     });
   });
 });
+
+// Convert stdout from C++ program to JSON string. Each line corresponds to a given body.
+function convertToJSON(data) {
+  // this filter removes the empty string that would otherwise appear as the last element
+  let lines = data.split('\n').filter(i => i);
+  var jsonData = "[";
+  for (var i = 0; i < lines.length; i++) {
+    jsonData += formatForJSON(lines[i]) + (i == lines.length - 1 ? "" : ",");
+  }
+  jsonData += "]";
+
+  return jsonData;
+}
+
+// Input a string of the form "{mass} {x} {y} {velocity_x} {velocity_y}"
+function formatForJSON(data) {
+  let d = data.split(' ');
+
+  var res = "{";
+  res += '"id":' + d[0] + ",";
+  res += '"m":' + d[1] + ",";
+  res += '"x":' + d[2] + ",";
+  res += '"y":' + d[3] + ",";
+  res += '"vx":' + d[4] + ",";
+  res += '"vy":' + d[5] + "}";
+
+  return res;
+}
