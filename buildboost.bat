@@ -1,0 +1,1 @@
+g++ -I "C:\boost_1_64_0\boost_1_64_0" .\test.cpp -o test

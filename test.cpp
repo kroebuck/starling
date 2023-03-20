@@ -8,13 +8,13 @@
 
 int main()
 {
-	System system;
+	System system(2);
 	system.addFromFile("initial_data.csv");
 
 	while (true)
 	{
 		system.update();
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(5));
 	}
 
 	return 0;
