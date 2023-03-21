@@ -52,6 +52,7 @@ class Universe
 {
 public:
 	int _dim;
+    double _max = 0.0;
 	std::vector<Particle*> _particles;
 	Universe(int dim);
 	//~Universe();

@@ -105,6 +105,9 @@ Vector2 F_r(Particle* p1, Particle* p2)
 
 	// x = 1 / |r|^3
 	double mag = r.magnitude();
+    if (mag < 10) {
+        mag = 10;
+    }
 	mag = mag * mag * mag;
 	mag = 1 / mag;
 
@@ -136,6 +139,7 @@ void Universe::update()
 	// calculate gravitational acceleration b/w all pairs of bodies
 	for (int i = 0; i < _particles.size() - 1; i++) {
 		for (int j = i + 1; j < _particles.size(); j++) {
+//            double mag = getSeparationVector(_particles[i], _particles[j]).magnitude();
 			Vector2 r = F_r(_particles[i], _particles[j]); // r = r / |r|^3
 
 			_particles[i]->da.x += _particles[j]->m * r.x;

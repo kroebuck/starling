@@ -1,0 +1,13 @@
+# ninja log v5
+9	1126	7011327649970568	CMakeFiles/starling.dir/test.cpp.obj	21dadd18102957ee
+1	1250	7011327651326936	CMakeFiles/starling.dir/universe.cpp.obj	2aa567759e54f84e
+1251	1565	7011327654338873	starling.exe	41ab484f0a922d6d
+10	936	7011336470869095	CMakeFiles/starling.dir/test.cpp.obj	21dadd18102957ee
+3	1073	7011336472205531	CMakeFiles/starling.dir/universe.cpp.obj	2aa567759e54f84e
+1074	1280	7011336474285084	starling.exe	41ab484f0a922d6d
+5	963	7011337644268546	CMakeFiles/starling.dir/universe.cpp.obj	2aa567759e54f84e
+964	1137	7011337645983912	starling.exe	41ab484f0a922d6d
+3	674	7011337893813895	CMakeFiles/starling.dir/universe.cpp.obj	2aa567759e54f84e
+682	880	7011337895813482	starling.exe	41ab484f0a922d6d
+4	635	7011338136095595	CMakeFiles/starling.dir/universe.cpp.obj	2aa567759e54f84e
+636	778	7011338137482214	starling.exe	41ab484f0a922d6d
