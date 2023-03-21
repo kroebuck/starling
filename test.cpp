@@ -3,18 +3,18 @@
 #include <chrono> // sleep
 #include <thread> // sleep
 
-#include "system.h"
+#include "universe.h"
 
 
 int main()
 {
-	System system(2);
-	system.addFromFile("initial_data.csv");
+	Universe u(2);
+	u.addFromFile("initial_data.csv");
 
 	while (true)
 	{
-		system.update();
-		//std::this_thread::sleep_for(std::chrono::milliseconds(5));
+		u.update();
+		//std::this_thread::sleep_for(std::chrono::milliseconds(2));
 	}
 
 	return 0;

@@ -1,5 +1,5 @@
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#ifndef UNIVERSE_H
+#define UNIVERSE_H
 
 #include <cmath>
 #include <string>
@@ -34,12 +34,12 @@ struct Vector3
 	double magnitude() { return sqrt(x*x + y*y + z*z); }
 };
 
-struct Body
+struct Particle
 {
 	int id;
 	double m;
 	Vector2 pos, vel, da;
-	Body() {
+	Particle() {
 		id = 0;
 		m = 0.0;
 		pos = Vector2(0.0, 0.0);
@@ -48,17 +48,17 @@ struct Body
 	}
 };
 
-class System
+class Universe
 {
 public:
 	int _dim;
-	std::vector<Body*> _bodies;
-	System(int dim);
-	//~System();
+	std::vector<Particle*> _particles;
+	Universe(int dim);
+	//~Universe();
 	void add(double m, double x, double y, double vx, double vy);
 	void addFromFile(std::string filename);
-	void printBody(Body* b);
-	void printSystem();
+	void printParticle(Particle* b);
+	void printUniverse();
 	void update();
 };
 
