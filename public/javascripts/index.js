@@ -1,55 +1,47 @@
-function Body(id, m, x, y, vx, vy) {
+function Particle(id, position) {
 	this.id = id;
-	this.m = m;
-	this.x = x;
-	this.y = y;
-	this.vx = vx;
-	this.vy = vy;
+	this.position = position;
 }
 
-var bodies = [];
+var particles = [];
 
-function getBody(id) {
-	for (var i = 0; i < bodies.length; i++) {
-		if (bodies[i].id == id) return bodies[i];
+function getParticle(id) {
+	for (var i = 0; i < particles.length; i++) {
+		if (particles[i].id == id) return particles[i];
 	}
 	return null;
 }
 
-function draw(x, y) {
-	let X = scale * x;
-	let Y = scale * y;
-	ctx.fillRect(X, Y, 1, 1);
-	// ctx.fillRect(xNew, yNew, 5, 5);
-	// ctx.moveTo(x, y);
-	// ctx.lineTo(xNew, yNew);
-	// ctx.stroke();
+function addPoint(id, x, y, z) {
+	if (particles[id].pos.length == 10) {
+		particles[id].pos.splice(0, 1);
+	}
+
+	let point = new THREE.Vector3(x, y, z);
+	particles[id].pos.push(point);
 }
 
-var canvas, ctx;
-let scale = 0.3;
+var scene;
+var camera;
+var renderer;
 
 document.addEventListener('DOMContentLoaded', function() {
 	var socket = io();
-	canvas = document.getElementById('canvas');
-	ctx = canvas.getContext("2d");
-	ctx.translate(canvas.width/2, canvas.height/2);
-	//ctx.fillStyle = "#FF0000";
-	ctx.fillRect(0,0,2,2);
-	//ctx.fillStyle = "#FFFFFF";
+
+	setupScene();
+	//draw();
 
 	socket.on('data', (res) => {
 		res = JSON.parse(res);
 		res.forEach((item) => {
-			draw(item.x, item.y);
-			// var body = getBody(item.id);
-			// if (body == null) {
-			// 	body = new Body(item.id, item.m, item.x, item.y, item.vx, item.vy);
-			// 	bodies.push(body);
+			draw(item.x, item.y, 0.0);
+			// var particle = getParticle(item.id);
+			// if (particle == null) {
+			// 	particle = new Particle(particles.length, item.x, item.y, 0.0);
+			// 	particles.push(particle);
 			// } else {
-			// 	//var canvas = document.getElementById('canvas');
-			// 	draw(body.x, body.y, item.x, item.y);
-			// 	// update body
+			// 	addPoint(particle.id, item.x, item.y, 0.0);
+			// 	draw(particle.id);
 			// }
 		});
 	});
@@ -58,3 +50,52 @@ document.addEventListener('DOMContentLoaded', function() {
 		socket.emit('startSimulation', {});
 	};
 });
+
+function setupScene() {
+	scene = new THREE.Scene();
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize( 0.8 * window.innerWidth, 0.8 * window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+	var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+	var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	cube = new THREE.Mesh( geometry, material );
+	scene.add( cube );
+
+	camera.position.z = 5;
+
+	animate();
+}
+
+function animate() {
+	requestAnimationFrame( animate );
+
+	cube.rotation.x += 0.01;
+	cube.rotation.y += 0.01;
+
+	renderer.render( scene, camera );
+}
+
+// function draw() {
+// 	const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+// 	const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+// 	const cube = new THREE.Mesh( geometry, material );
+// 	scene.add( cube );
+
+// 	camera.position.z = 5;
+
+// 	animate(cube);
+// }
+
+// function animate(obj) {
+// 	requestAnimationFrame( animate );
+
+// 	obj.rotation.x += 0.01;
+// 	obj.rotation.y += 0.01;
+
+// 	renderer.render( scene, camera );
+// }

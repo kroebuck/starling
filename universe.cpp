@@ -105,8 +105,8 @@ Vector2 F_r(Particle* p1, Particle* p2)
 
 	// x = 1 / |r|^3
 	double mag = r.magnitude();
-    if (mag < 10) {
-        mag = 10;
+    if (mag < 5) {
+        mag = 5;
     }
 	mag = mag * mag * mag;
 	mag = 1 / mag;
