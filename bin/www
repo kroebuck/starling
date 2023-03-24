@@ -102,7 +102,7 @@ const { exec } = require("child_process"); // needed to run compiled C++ code
 io.on('connection', (socket) => {
 socket.on('startSimulation', () => {
     var spawn = require('child_process').spawn;
-    var child = spawn('test'); // the executable we want to run
+    var child = spawn('./test'); // the executable we want to run
 
     // You can also use a variable to save the output 
     // for when the script closes later

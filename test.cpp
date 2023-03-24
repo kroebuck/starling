@@ -14,7 +14,7 @@ int main()
 	while (true)
 	{
 		u.update();
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 
 	return 0;
