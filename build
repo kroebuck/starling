@@ -1,1 +1,1 @@
-g++ *.cpp -o test
+g++ *.cpp -o starc
