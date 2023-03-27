@@ -161,8 +161,10 @@ function formatForJSON(data) {
   res += '"m":' + d[1] + ",";
   res += '"x":' + d[2] + ",";
   res += '"y":' + d[3] + ",";
-  res += '"vx":' + d[4] + ",";
-  res += '"vy":' + d[5] + "}";
+  res += '"z":' + d[4] + ",";
+  res += '"vx":' + d[5] + ",";
+  res += '"vy":' + d[6] + ",";
+  res += '"vz":' + d[7] + "}";
 
   return res;
 }
