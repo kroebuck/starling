@@ -5,14 +5,17 @@
 #include <string>
 #include <vector>
 
+const double MINIMUM_MAGNITUDE = 5.0;
+
 Universe::Universe(int dim) {
 	_dim = dim;
 }
 
-// Universe::~Universe() {
-// 	// By assigning _bodies to an empty vector, the previous contents' memory is freed
-// 	_bodies = new std::vector<Body*>();
-// }
+Universe::~Universe() {
+	for (int i = 0: i < _particles.length; i++) {
+		delete _particles[i];
+	}
+}
 
 void Universe::add(double m, double x, double y, double z, double vx, double vy, double vz)
 {
@@ -110,8 +113,8 @@ Vector3 F_r(Particle* p1, Particle* p2)
 
 	// x = 1 / |r|^3
 	double mag = r.magnitude();
-    if (mag < 5) {
-        mag = 5;
+    if (mag < MINIMUM_MAGNITUDE) {
+        mag = MINIMUM_MAGNITUDE;
     }
 	mag = mag * mag * mag;
 	mag = 1 / mag;

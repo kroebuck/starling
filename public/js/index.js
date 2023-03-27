@@ -1,10 +1,12 @@
 var scene;
 var camera;
 var renderer;
+var controls;
 
 var particles = [];
 
 const TAIL_LENGTH = 10; // number of previous points to use to draw tail
+var PAUSED = false;
 
 document.addEventListener('DOMContentLoaded', function() {
     var socket = io();
@@ -23,6 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('start_simulation').onclick = () => {
         socket.emit('startSimulation', {});
     };
+
+    document.getElementById('pause_simulation').onclick = () => {
+        PAUSED = true;
+    };
+
+    document.getElementById('resume_simulation').onclick = () => {
+        PAUSED = false;
+    };
+
+    document.getElementById('reset_camera').onclick = () => {
+        controls.reset();
+    };
 });
 
 function setupScene() {
@@ -35,7 +49,7 @@ function setupScene() {
     document.body.appendChild( renderer.domElement );
 
     // Orbit Controls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     // Cartesian coordinate system axes
     const axesHelper = new THREE.AxisHelper( 5 );
@@ -45,12 +59,14 @@ function setupScene() {
 }
 
 function animate() {
-    // Update particles
-    if (particles.length > 0) {
-        particles.forEach(p => {
-            p.tail = generateTail(p);
-        });
-        updateParticlePositions();
+    if (!PAUSED) {
+        // Update particles
+        if (particles.length > 0) {
+            particles.forEach(p => {
+                p.tail = generateTail(p);
+            });
+            updateParticlePositions();
+        }
     }
 
     // Render scene
@@ -71,8 +87,10 @@ function generateSphere() {
 function generateTail(particle) {
     if (particle.tail != null) scene.remove(particle.tail);
 
+    if (particle.pos.length <= 1) return;
+
     let geometry = new THREE.Geometry();
-    for (var i = 1; i< TAIL_LENGTH; i++) {
+    for (var i = 0; i < TAIL_LENGTH; i++) {
         let j = particle.posIndex - i;
         if (j < 0) break;
         let position = particle.pos[j];
