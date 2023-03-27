@@ -1,3 +1,0 @@
-C:/Users/Kevin/source/repos/starling/cmake-build-debug/CMakeFiles/starling.dir
-C:/Users/Kevin/source/repos/starling/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Kevin/source/repos/starling/cmake-build-debug/CMakeFiles/rebuild_cache.dir
