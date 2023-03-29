@@ -1,6 +1,8 @@
 #ifndef UNIVERSE_H
 #define UNIVERSE_H
 
+#include "physics.h"
+
 #include <cmath>
 #include <string>
 #include <vector>
@@ -35,11 +37,14 @@ struct Particle
 class Universe
 {
 public:
+	physics::CollisionMode collisionMode;
 	int _dim;
     double _max = 0.0;
 	std::vector<Particle*> _particles;
+
 	Universe(int dim);
 	~Universe();
+
 	void add(double m, double x, double y, double z, double vx, double vy, double vz);
 	void addFromFile(std::string filename);
 	void printParticle(Particle* b);

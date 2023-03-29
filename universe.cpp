@@ -5,14 +5,15 @@
 #include <string>
 #include <vector>
 
-const double MINIMUM_MAGNITUDE = 5.0;
+const double MINIMUM_MAGNITUDE = 4.0;
 
 Universe::Universe(int dim) {
+	collisionMode = physics::CollisionMode::Collisionless;
 	_dim = dim;
 }
 
 Universe::~Universe() {
-	for (int i = 0: i < _particles.length; i++) {
+	for (int i = 0; i < _particles.size(); i++) {
 		delete _particles[i];
 	}
 }
@@ -126,9 +127,12 @@ Vector3 F_r(Particle* p1, Particle* p2)
 //
 //
 
-// TODO: Implement/call actual n-body physics here
 void Universe::update()
 {
+	if (collisionMode == physics::CollisionMode::Collisionless) {
+		//
+	}
+
 	double dt = 0.01;
 	double G = 100000.0;
 
