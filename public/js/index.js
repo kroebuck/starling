@@ -22,28 +22,37 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById('start_simulation').onclick = () => {
+    document.getElementById('start_button').onclick = () => {
         socket.emit('startSimulation', {});
+
+        setupSimulationUI();
     };
 
-    document.getElementById('pause_simulation').onclick = () => {
-        PAUSED = true;
+    document.getElementById('play_pause_button').onclick = () => {
+        PAUSED = !PAUSED;
+        var btn = document.getElementById('play_pause_button');
+        btn.innerHTML = PAUSED ? "⏵" : "⏸";
     };
 
-    document.getElementById('resume_simulation').onclick = () => {
-        PAUSED = false;
-    };
-
-    document.getElementById('reset_camera').onclick = () => {
+    document.getElementById('reset_camera_button').onclick = () => {
         controls.reset();
     };
 });
 
+function setupSimulationUI() {
+    var startBtn = document.getElementById('start_button');
+    startBtn.style.display = 'none';
+
+    var playpauseBtn = document.getElementById('play_pause_button');
+    playpauseBtn.style.display = null;
+    playpauseBtn.innerHTML = "⏸";
+}
+
 function setupScene() {
     // Basic THREE.js scene setup
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 100 );
-    camera.position.z = 35;
+    camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera.position.z = 50;
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( 0.8 * window.innerWidth, 0.8 * window.innerHeight );
     document.body.appendChild( renderer.domElement );
