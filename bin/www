@@ -100,9 +100,16 @@ const io = new Server(server);
 const { exec } = require("child_process"); // needed to run compiled C++ code
 
 io.on('connection', (socket) => {
-socket.on('startSimulation', () => {
-    var spawn = require('child_process').spawn;
-    var child = spawn('./starc'); // the executable we want to run
+  var spawn = require('child_process').spawn;
+  var child = null;
+
+  socket.on('disconnect', () => {
+    if (child) child.kill('SIGINT');
+    console.log("Child process killed");
+  });
+
+  socket.on('startSimulation', () => {
+    child = spawn('./starc'); // the executable we want to run
 
     // You can also use a variable to save the output 
     // for when the script closes later
@@ -134,7 +141,7 @@ socket.on('startSimulation', () => {
 
         console.log('closing code: ' + code);
 
-        console.log('Full output of script: ', scriptOutput);
+        // console.log('Full output of script: ', scriptOutput);
     });
   });
 });
