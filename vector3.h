@@ -1,6 +1,8 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include <cmath>
+
 class Vector3 {
 public:
     double x, y, z;
@@ -12,6 +14,7 @@ public:
     void add(Vector3 w);
     void add(Vector3 w, double c);
     double magnitude();
+    void set(double x, double y, double z);
 };
 
 #endif

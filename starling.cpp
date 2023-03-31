@@ -8,7 +8,7 @@
 
 int main()
 {
-	Universe u(2);
+	Universe u(3);
 	u.addFromFile("initial_data.csv");
 
 	while (true)

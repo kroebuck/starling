@@ -1,39 +1,15 @@
 #ifndef UNIVERSE_H
 #define UNIVERSE_H
 
+#include "particle.h"
 #include "physics.h"
 #include "vector3.h"
 
 #include <cmath>
+#include <fstream> // read files
+#include <iostream>
 #include <string>
 #include <vector>
-
-
-// struct Vector3
-// {
-// 	double x, y, z;
-// 	Vector3() {
-// 		x = 0.0;
-// 		y = 0.0;
-// 		z = 0.0;
-// 	}
-// 	Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
-// 	double magnitude() { return sqrt(x*x + y*y + z*z); }
-// };
-
-struct Particle
-{
-	int id;
-	double m;
-	Vector3 pos, vel, da;
-	Particle() {
-		id = 0;
-		m = 0.0;
-		pos = Vector3();
-		vel = Vector3();
-		da = Vector3();
-	}
-};
 
 class Universe
 {

@@ -1,6 +1,12 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
+#include "particle.h"
+#include "vector3.h"
+
+#include <cmath>
+#include <vector>
+
 namespace physics {
     enum class CollisionMode {
         Elastic,
@@ -8,10 +14,10 @@ namespace physics {
         Collisionless
     };
 
-    // double dt = 0.01;
-    // double G = 100000.0;
+    extern double dt;
+    extern double G;
 
-    // void update();
+    void update(std::vector<Particle*>& p, CollisionMode mode);
 }
 
 #endif

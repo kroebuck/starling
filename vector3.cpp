@@ -1,9 +1,12 @@
 #include "vector3.h"
 
-#include <cmath>
+Vector3::Vector3() {
+    x = 0;
+    y = 0;
+    z = 0;
+}
 
-Vector3::Vector3() = default;
-Vector3::Vector3(double x, double y, double z) : x(x), y(y), z(z) {}
+Vector3::Vector3(double nx, double ny, double nz) : x(x), y(y), z(z) {}
 
 void Vector3::scale(double c) {
     x *= c;
@@ -25,4 +28,10 @@ void Vector3::add(Vector3 w, double c) {
 
 double Vector3::magnitude() {
     return sqrt(x*x + y*y + z*z);
+}
+
+void Vector3::set(double nx, double ny, double nz) {
+    x = nx;
+    y = ny;
+    z = nz;
 }
