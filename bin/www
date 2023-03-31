@@ -1,0 +1,177 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('starling:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3001');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+/**
+ * Setup socket.io
+ */
+
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+const { exec } = require("child_process"); // needed to run compiled C++ code
+
+io.on('connection', (socket) => {
+  var spawn = require('child_process').spawn;
+  var child = null;
+
+  socket.on('disconnect', () => {
+    if (child) child.kill('SIGINT');
+    console.log("Child process killed");
+  });
+
+  socket.on('startSimulation', () => {
+    child = spawn('./starc'); // the executable we want to run
+
+    // You can also use a variable to save the output 
+    // for when the script closes later
+    var scriptOutput = "";
+
+    child.stdout.setEncoding('utf8');
+    child.stdout.on('data', function(data) {
+        data = data.toString();
+
+        let jsonData = convertToJSON(data);
+
+        socket.emit('data', jsonData);
+
+        scriptOutput += data;
+    });
+
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', function(data) {
+        //Here is where the error output goes
+
+        console.log('stderr: ' + data);
+
+        data = data.toString();
+        scriptOutput += data;
+    });
+
+    child.on('close', function(code) {
+        //Here you can get the exit code of the script
+
+        console.log('closing code: ' + code);
+
+        // console.log('Full output of script: ', scriptOutput);
+    });
+  });
+});
+
+// Convert stdout from C++ program to JSON string. Each line corresponds to a given body.
+function convertToJSON(data) {
+  // this filter removes the empty string that would otherwise appear as the last element
+  let lines = data.split('\n').filter(i => i);
+  var jsonData = "[";
+  for (var i = 0; i < lines.length; i++) {
+    jsonData += formatForJSON(lines[i]) + (i == lines.length - 1 ? "" : ",");
+  }
+  jsonData += "]";
+
+  return jsonData;
+}
+
+// Input a string of the form "{mass} {x} {y} {velocity_x} {velocity_y}"
+function formatForJSON(data) {
+  let d = data.split(' ');
+
+  var res = "{";
+  res += '"id":' + d[0] + ",";
+  res += '"m":' + d[1] + ",";
+  res += '"x":' + d[2] + ",";
+  res += '"y":' + d[3] + ",";
+  res += '"z":' + d[4] + ",";
+  res += '"vx":' + d[5] + ",";
+  res += '"vy":' + d[6] + ",";
+  res += '"vz":' + d[7] + "}";
+
+  return res;
+}
