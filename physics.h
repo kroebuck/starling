@@ -8,10 +8,10 @@ namespace physics {
         Collisionless
     };
 
-    double dt = 0.01;
-    double G = 100000.0;
+    // double dt = 0.01;
+    // double G = 100000.0;
 
-    void update();
+    // void update();
 }
 
 #endif

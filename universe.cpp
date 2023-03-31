@@ -1,5 +1,6 @@
 #include "universe.h"
 
+#include <cmath>
 #include <iostream>
 #include <fstream> // read files
 #include <string>
@@ -81,21 +82,20 @@ void Universe::printUniverse()
 // HELPER FUNCTIONS
 //
 
-Vector3 add(Vector3 v, Vector3 w)
-{
-	v.x += w.x;
-	v.y += w.y;
-	v.z += w.z;
-	return v;
-}
+// Vector3 add(Vector3 v, Vector3 w)
+// {
+// 	v.x += w.x;
+// 	v.y += w.y;
+// 	v.z += w.z;
+// 	return v;
+// }
 
-Vector3 scale(Vector3 v, double c)
-{
-	v.x *= c;
-	v.y *= c;
-	v.z *= c;
-	return v;
-}
+// void scale(Vector3& v, double c)
+// {
+// 	v.x *= c;
+// 	v.y *= c;
+// 	v.z *= c;
+// }
 
 Vector3 getSeparationVector(Particle* p1, Particle* p2)
 {
@@ -113,14 +113,11 @@ Vector3 F_r(Particle* p1, Particle* p2)
 	Vector3 r = getSeparationVector(p1, p2);
 
 	// x = 1 / |r|^3
-	double mag = r.magnitude();
-    if (mag < MINIMUM_MAGNITUDE) {
-        mag = MINIMUM_MAGNITUDE;
-    }
-	mag = mag * mag * mag;
-	mag = 1 / mag;
+	double mag =  1 / std::pow(std::max(r.magnitude(), MINIMUM_MAGNITUDE), 3);
 
-	return scale(r, mag);
+	r.scale(mag);
+
+	return r;
 }
 
 //
@@ -138,40 +135,24 @@ void Universe::update()
 
 	// update velocity/position & reset da to zero
 	for (int i = 0; i < _particles.size(); i++) {
-		_particles[i]->vel.x += dt / 2.0 * _particles[i]->da.x;
-		_particles[i]->vel.y += dt / 2.0 * _particles[i]->da.y;
-		_particles[i]->vel.z += dt / 2.0 * _particles[i]->da.z;
-
-		_particles[i]->pos.x += dt * _particles[i]->vel.x;
-		_particles[i]->pos.y += dt * _particles[i]->vel.y;
-		_particles[i]->pos.z += dt * _particles[i]->vel.z;
-
-		_particles[i]->da.x = 0.0;
-		_particles[i]->da.y = 0.0;
-		_particles[i]->da.z = 0.0;
+		_particles[i]->vel.add(_particles[i]->da, dt / 2.0); // v_i += (dt/2) * a_i
+		_particles[i]->pos.add(_particles[i]->vel, dt);		 // x_i += dt * v_i
+		_particles[i]->da.scale(0.0);						 // a_i = 0
 	}
 
 	// calculate gravitational acceleration b/w all pairs of bodies
 	for (int i = 0; i < _particles.size() - 1; i++) {
 		for (int j = i + 1; j < _particles.size(); j++) {
-//            double mag = getSeparationVector(_particles[i], _particles[j]).magnitude();
-			Vector3 r = F_r(_particles[i], _particles[j]); // r = r / |r|^3
+			Vector3 r = F_r(_particles[i], _particles[j]);   // r = r / |r|^3
 
-			_particles[i]->da.x += _particles[j]->m * r.x;
-			_particles[i]->da.y += _particles[j]->m * r.y;
-			_particles[i]->da.z += _particles[j]->m * r.z;
-
-			_particles[j]->da.x -= _particles[i]->m * r.x;
-			_particles[j]->da.y -= _particles[i]->m * r.y;
-			_particles[j]->da.z -= _particles[i]->m * r.z;
+			_particles[i]->da.add(r, _particles[j]->m);		 // da_i += m * r
+			_particles[j]->da.add(r, -1 * _particles[i]->m); // da_j -= m * r
 		}
 	}
 
 	// update velocity of each body
 	for (int i = 0; i < _particles.size(); i++) {
-		_particles[i]->vel.x += G * dt / 2.0 * _particles[i]->da.x;
-		_particles[i]->vel.y += G * dt / 2.0 * _particles[i]->da.y;
-		_particles[i]->vel.z += G * dt / 2.0 * _particles[i]->da.z;
+		_particles[i]->vel.add(_particles[i]->da, G * dt / 2.0); // v_i += (G * dt / 2) * a_i
 	}
 
 	printUniverse();
