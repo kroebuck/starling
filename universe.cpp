@@ -1,7 +1,7 @@
 #include "universe.h"
 
 Universe::Universe(int dim) {
-	collisionMode = physics::CollisionMode::Collisionless;
+	collisionMode = physics::CollisionMode::Inelastic;
 	_dim = dim;
 }
 
@@ -69,7 +69,7 @@ void Universe::printUniverse()
 
 void Universe::update()
 {
-	physics::update(_particles, collisionMode);
+	physics::evolve(_particles, collisionMode);
 
 	printUniverse();
 }

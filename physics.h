@@ -17,7 +17,7 @@ namespace physics {
     extern double dt;
     extern double G;
 
-    void update(std::vector<Particle*>& p, CollisionMode mode);
+    void evolve(std::vector<Particle*>& p, CollisionMode mode);
 }
 
 #endif
