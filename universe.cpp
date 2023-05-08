@@ -1,8 +1,8 @@
 #include "universe.h"
 
-Universe::Universe(int dim) {
+Universe::Universe() {
 	collisionMode = physics::CollisionMode::Collisionless;
-	_dim = dim;
+	_dim = 3;
 }
 
 Universe::~Universe() {

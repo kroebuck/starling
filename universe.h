@@ -19,7 +19,7 @@ public:
     double _max = 0.0;
 	std::vector<Particle*> _particles;
 
-	Universe(int dim);
+	Universe();
 	~Universe();
 
 	void add(double m, double x, double y, double z, double vx, double vy, double vz);
