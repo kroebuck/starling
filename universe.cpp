@@ -1,7 +1,7 @@
 #include "universe.h"
 
 Universe::Universe(int dim) {
-	collisionMode = physics::CollisionMode::Inelastic;
+	collisionMode = physics::CollisionMode::Collisionless;
 	_dim = dim;
 }
 

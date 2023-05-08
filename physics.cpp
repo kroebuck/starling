@@ -16,7 +16,7 @@ namespace physics {
 
 
     double dt = 0.01;
-    double G = 100.0;
+    double G = 10000.0;
 
     void evolve(std::vector<Particle*>& p, CollisionMode mode) {
         // update velocity/position & reset da to zero
@@ -27,14 +27,14 @@ namespace physics {
         }
 
         // calculate gravitational acceleration b/w all pairs of bodies
-        // for (int i = 0; i < p.size() - 1; i++) {
-        //     for (int j = i + 1; j < p.size(); j++) {
-        //         Vector3 r = F_r(p[i], p[j]);   // r = r / |r|^3
+        for (int i = 0; i < p.size() - 1; i++) {
+            for (int j = i + 1; j < p.size(); j++) {
+                Vector3 r = F_r(p[i], p[j]);   // r = r / |r|^3
 
-        //         p[i]->acceleration.add(r, p[j]->mass);
-        //         p[j]->acceleration.add(r, -1 * p[i]->mass);
-        //     }
-        // }
+                p[i]->acceleration.add(r, p[j]->mass);
+                p[j]->acceleration.add(r, -1 * p[i]->mass);
+            }
+        }
 
          resolveCollisions(p, mode);
 
