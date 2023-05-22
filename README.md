@@ -1,6 +1,6 @@
 # How to run
 
-```.\build``` : compile C++ code
+```./build``` : compile C++ code
 
 ```npm start``` : start server
 
