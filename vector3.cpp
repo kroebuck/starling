@@ -8,6 +8,12 @@ Vector3::Vector3() {
 
 Vector3::Vector3(double nx, double ny, double nz) : x(x), y(y), z(z) {}
 
+Vector3::Vector3(const Vector3& v) {
+    x = v.x;
+    y = v.y;
+    z = v.z;
+}
+
 void Vector3::scale(double c) {
     x *= c;
     y *= c;

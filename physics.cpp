@@ -16,7 +16,7 @@ namespace physics {
 
 
     double dt = 0.01;
-    double G = 10000.0;
+    double G = 10000; //0.0000000000667;
 
     void evolve(std::vector<Particle*>& p, CollisionMode mode) {
         // update velocity/position & reset da to zero

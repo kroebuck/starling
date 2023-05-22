@@ -9,6 +9,7 @@ public:
 
     Vector3();
     Vector3(double x, double y, double z);
+    Vector3(const Vector3&);
 
     void scale(double c);
     void add(Vector3 w);
