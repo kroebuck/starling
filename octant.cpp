@@ -3,7 +3,6 @@
 Octant::Octant(Vector3 position, double length) {
     _position = position;
     _length = length;
-    _mass = 0;
 }
 
 /*
@@ -33,54 +32,54 @@ Octant* Octant::FNW() {
     double nx = _position.x;
     double ny = _position.y + newLength;
     double nz = _position.z + newLength;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::FNE() {
     double newLength = _length / 2.0;
     double nx = _position.x + newLength;
     double ny = _position.y + newLength;
     double nz = _position.z + newLength;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::FSW() {
     double newLength = _length / 2.0;
     double nx = _position.x;
     double ny = _position.y;
     double nz = _position.z + newLength;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::FSE() {
     double newLength = _length / 2.0;
     double nx = _position.x + newLength;
     double ny = _position.y;
     double nz = _position.z + newLength;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::BNW() {
     double newLength = _length / 2.0;
     double nx = _position.x;
     double ny = _position.y + newLength;
     double nz = _position.z;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::BNE() {
     double newLength = _length / 2.0;
     double nx = _position.x + newLength;
     double ny = _position.y + newLength;
     double nz = _position.z;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::BSW() {
     double newLength = _length / 2.0;
     double nx = _position.x;
     double ny = _position.y;
     double nz = _position.z;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }
 Octant* Octant::BSE() {
     double newLength = _length / 2.0;
     double nx = _position.x + newLength;
     double ny = _position.y;
     double nz = _position.z;
-    return Octant(Vector3(nx, ny, nz), newLength);
+    return new Octant(Vector3(nx, ny, nz), newLength);
 }

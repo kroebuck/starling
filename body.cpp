@@ -41,15 +41,15 @@ void Body::addForce(Body* b) {
 /*
 * Is this body contained within the inputted octant?
 */
-// bool Body::in(Octant* o) {
-//     return o->contains(_position);
-// }
+bool Body::in(Octant* o) {
+    return o->contains(_position);
+}
 
 /*
 * A static method for adding two bodies by combining their position and mass,
 * and returning the resulting body to represent center of gravity for a quadrant.
 */
-static Body* combine(Body* b1, Body* b2) {
+Body* Body::combine(Body* b1, Body* b2) {
     // p' = (m1p1 + m2p2) / (m1 + m2)
     Vector3 newPosition;
     Vector3 newVelocity;

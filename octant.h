@@ -12,7 +12,16 @@ public:
     Octant(Vector3 position, double length);
     bool contains(Vector3 point);
     double length();
-    Octant* FNW(), FNE(), FSW(), FSE(), BNW(), BNE(), BSW(), BSE(); // Instantiate and return octant rooted at this octant
+
+    // Instantiate and return octant rooted at this octant
+    Octant* FNW();
+    Octant* FNE();
+    Octant* FSW();
+    Octant* FSE();
+    Octant* BNW();
+    Octant* BNE();
+    Octant* BSW();
+    Octant* BSE();
 };
 
 #endif
