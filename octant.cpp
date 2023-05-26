@@ -21,6 +21,26 @@ double Octant::length() {
     return _length;
 }
 
+/*
+* Return an instance of the child octant that the inputted point lies in.
+*/
+Octant* Octant::getChildOctant(Vector3 point) {
+    if (!contains(point)) return null;
+
+    // parameters for child octant
+    double newLength = _length / 2.0;
+    double nx = _position.x;
+    double ny = _position.y;
+    double nz = _position.z;
+
+    // update parameters to place point in correct octant
+    if (point.x <= _position.x + _length) nx += newLength;
+    if (point.y <= _position.y + _length) ny += newLength;
+    if (point.z <= _position.z + _length) nz += newLength;
+
+    return new Octant(Vector3(nx, ny, nz), newLength);
+}
+
 /* 
 * Instantiate and return octant rooted at this octant
 * z-direction: F = front, B = back

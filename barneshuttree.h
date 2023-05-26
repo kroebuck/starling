@@ -9,7 +9,7 @@ class BarnesHutTree {
 public:
     Body* _body;
     Octant* _octant;
-    BarnesHutTree* _children[8]; // FNW, FNE, FSW, FSE, BNW, BNE, BSW, BSE
+    BarnesHutTree* _children[8];
 
     BarnesHutTree(Octant* o);
     void insert(Body* b);

@@ -17,7 +17,7 @@ void BarnesHutTree::insert(Body* b) {
         return;
     }
     
-    // Find child octant b will be in
+    // Find child octant that b will be in
     int childOctantIndex = getChildOctantIndex(b->_position);
 
     // Generate child octant
@@ -58,7 +58,8 @@ void BarnesHutTree::updateForce(Body* b) {
 }
 
 /*
-* Checks if given BarnesHutTree is a leaf node (i.e. all octant-references are null).
+* Checks if given BarnesHutTree is external (only body in this BarnesHutTree).
+* External nodes are leaf nodes (i.e. all children octant-references are null).
 */
 bool BarnesHutTree::isExternal() {
     for (int i = 0; i < 8; i++) {
@@ -66,6 +67,20 @@ bool BarnesHutTree::isExternal() {
     }
     return true;
 }
+
+// z-axis | F: Front, B: Back
+// y-axis | N: North, S: South
+// x-axis | W: West, E: East
+enum class ChildOctant {
+    FNW,
+    FNE,
+    FSW,
+    FSE,
+    BNW,
+    BNE,
+    BSW,
+    BSE
+};
 
 /* 
 * 0,   1,   2,   3,   4,   5,   6,   7
