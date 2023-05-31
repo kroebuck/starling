@@ -17,17 +17,17 @@ void BarnesHutTree::insert(Body* b) {
         return;
     }
     
-    // Find child octant that b will be in
-    int childOctantIndex = getChildOctantIndex(b->_position);
+    // Determine index corresponding to which child octant b will be in
+    int i = getChildOctantIndex(b->_position);
 
     // Generate child octant
-    if (_children[childOctantIndex] == NULL) {
-        Octant* o = generateChildOctant(childOctantIndex);
-        _children[childOctantIndex] = new BarnesHutTree(o);
+    if (_children[i] == NULL) {
+        Octant* o = _octant->generateChildOctant(b->_position);
+        _children[i] = new BarnesHutTree(o);
     }
 
     // Insert Body b into child octant
-    _children[childOctantIndex]->insert(b);
+    _children[i]->insert(b);
 
     if (isExternal()) {
         insert(b);
@@ -43,7 +43,6 @@ void BarnesHutTree::insert(Body* b) {
 *   Else bodies in this octant should be counted individually -> recurse on child octants
 */
 void BarnesHutTree::updateForce(Body* b) {
-    double FAR_LIMIT = 1.0; // TODO: MOVE THIS SOMEWHERE ELSE
     if (isExternal() && _body != b) {
         b->addForce(_body);
     } else if (_octant->length() / (_body->separationVectorTo(b).magnitude()) < FAR_LIMIT) {
@@ -68,21 +67,11 @@ bool BarnesHutTree::isExternal() {
     return true;
 }
 
-// z-axis | F: Front, B: Back
-// y-axis | N: North, S: South
-// x-axis | W: West, E: East
-enum class ChildOctant {
-    FNW,
-    FNE,
-    FSW,
-    FSE,
-    BNW,
-    BNE,
-    BSW,
-    BSE
-};
-
 /* 
+* The member array '_children' represents the 8 children octants for this tree's '_octant'.
+* Return the index for the child octant that the inputted Vector3 is contained in.
+*
+* The link between octants and the corresponding index is determined here and only here.
 * 0,   1,   2,   3,   4,   5,   6,   7
 * FNW, FNE, FSW, FSE, BNW, BNE, BSW, BSE
 */
@@ -92,18 +81,4 @@ int BarnesHutTree::getChildOctantIndex(Vector3 point) {
     bool east = point.z <= _octant->_position.z + _octant->length();
 
     return (front ? 0 : 4) + (north ? 0 : 2) + (east ? : 1);
-}
-
-Octant* BarnesHutTree::generateChildOctant(int index) {
-    if (index == 0) return _octant->FNW();
-    if (index == 1) return _octant->FNE();
-    if (index == 2) return _octant->FSW();
-    if (index == 3) return _octant->FSE();
-    if (index == 4) return _octant->BNW();
-    if (index == 5) return _octant->BNE();
-    if (index == 6) return _octant->BSW();
-    if (index == 7) return _octant->BSE();
-
-    // should be unreachable
-    return _octant->FNW();
 }
