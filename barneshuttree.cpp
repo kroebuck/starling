@@ -45,7 +45,7 @@ void BarnesHutTree::insert(Body* b) {
 void BarnesHutTree::updateForce(Body* b) {
     if (isExternal() && _body != b) {
         b->addForce(_body);
-    } else if (_octant->length() / (_body->separationVectorTo(b).magnitude()) < FAR_LIMIT) {
+    } else if (_octant->length() / _body->distanceTo(b) < FAR_LIMIT) {
         b->addForce(_body);
     } else {
         for (int i = 0; i < 8; i++) {

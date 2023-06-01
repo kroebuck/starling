@@ -16,6 +16,9 @@ public:
     void add(Vector3 w, double c);
     double magnitude();
     void set(double x, double y, double z);
+
+    static Vector3 difference(Vector3 v, Vector3 w);
+    static Vector3 sum(Vector3 v, Vector3 w);
 };
 
 #endif

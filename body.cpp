@@ -10,16 +10,6 @@ void Body::update(double dt) {
     _position.add(_velocity, dt);
 }
 
-/* 
-* Returns separation vector pointing from current body to inputted body
-*/
-Vector3 Body::separationVectorTo(Body* b) {
-    double dx = b->_position.x - _position.x;
-    double dy = b->_position.y - _position.y;
-    double dz = b->_position.z - _position.z;
-    return Vector3(dx, dy, dz);
-}
-
 /*
 * Set the _force vector to all zeros.
 */
@@ -32,7 +22,7 @@ void Body::resetForce() {
 * Add result to this body's _force vector.
 */
 void Body::addForce(Body* b) {
-    Vector3 separation = separationVectorTo(b);
+    Vector3 separation = Vector3::difference(_position, b->_position);
     double distance = separation.magnitude();
     double forceMagnitude = (physics::G * _mass * b->_mass) / (distance * distance);
     _force.add(separation, forceMagnitude / distance);
@@ -43,6 +33,13 @@ void Body::addForce(Body* b) {
 */
 bool Body::in(Octant* o) {
     return o->contains(_position);
+}
+
+/*
+* Return the magnitude of the separation vector from this body to the inputted body
+*/
+double Body::distanceTo(Body* b) {
+    return Vector3::difference(_position, b->_position).magnitude();
 }
 
 /*

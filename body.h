@@ -14,10 +14,10 @@ public:
 
     Body(Vector3 position, Vector3 velocity, double mass);
     void update(double dt);
-    Vector3 separationVectorTo(Body* b);
     void resetForce();
     void addForce(Body* b);
     bool in(Octant* o);
+    double distanceTo(Body* b);
 
     static Body* combine(Body* b1, Body* b2);
 };

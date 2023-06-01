@@ -41,3 +41,17 @@ void Vector3::set(double nx, double ny, double nz) {
     y = ny;
     z = nz;
 }
+
+/*
+* Return result of 'w - v'
+*/
+Vector3 Vector3::difference(Vector3 v, Vector3 w) {
+    return Vector3(v.x - w.x, v.y - w.y, v.z - w.z);
+}
+
+/*
+* Return result of 'v + w'
+*/
+Vector3 Vector3::sum(Vector3 v, Vector3 w) {
+    return Vector3(v.x + w.x, v.y + w.y, v.z + w.z);
+}
