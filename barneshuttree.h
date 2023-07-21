@@ -13,6 +13,8 @@ public:
     BarnesHutTree* _children[8];
 
     BarnesHutTree(Octant* o);
+    ~BarnesHutTree();
+    void destroyRecursive(BarnesHutTree* tree);
     void insert(Body* b);
     void updateForce(Body* b);
     bool isExternal();

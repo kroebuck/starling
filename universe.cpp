@@ -6,29 +6,22 @@ Universe::Universe() {
 }
 
 Universe::~Universe() {
-	for (int i = 0; i < _particles.size(); i++) {
-		delete _particles[i];
+	for (int i = 0; i < _bodies.size(); i++) {
+		delete _bodies[i];
 	}
 }
 
 void Universe::add(double m, double x, double y, double z, double vx, double vy, double vz)
 {
-	Particle* p = new Particle();
-
-	p->id = _particles.size();
-	p->mass = m;
-	p->position.set(x, y, z);
-	p->velocity.set(vx, vy, vz);
-	p->acceleration.set(0,0,0);
-
-	_particles.push_back(p);
+	Body* b = new Body(Vector3(x,y,z), Vector3(vx,vy,vz), m);
+	_bodies.push_back(b);
 }
 
 void Universe::addFromFile(std::string filename)
 {
 	std::ifstream infile("initial_data.csv");
 	std::string line;
-	std::getline(infile, line); // skip first row (labels for what each column is)
+	std::getline(infile, line); // Skip first row (column labels)
 	while (std::getline(infile, line))
 	{
 		// Tokenize line to get inital mass, position, and velocity of current body
@@ -52,24 +45,43 @@ void Universe::addFromFile(std::string filename)
 
 }
 
-void Universe::printParticle(Particle* p)
+// TODO: Add id property to Body class
+void Universe::printBody(Body* b)
 {
-	std::cout << p->id << " " << p->mass << " "
-			  << p->position.x << " " << p->position.y << " " << p->position.z << " " 
-  			  << p->velocity.x << " " << p->velocity.y << " " << p->velocity.z <<std::endl; 
+	// std::cout << b->id << " " << b->_mass << " "
+	// 		  << b->_position.x << " " << b->_position.y << " " << b->_position.z << " " 
+  	// 		  << b->_velocity.x << " " << b->_velocity.y << " " << b->_velocity.z <<std::endl; 
+	std::cout << "0" << " " << b->_mass << " "
+			  << b->_position.x << " " << b->_position.y << " " << b->_position.z << " " 
+  			  << b->_velocity.x << " " << b->_velocity.y << " " << b->_velocity.z <<std::endl; 
 }
 
 void Universe::printUniverse()
 {
-	for (int i = 0; i < _particles.size(); i++)
+	for (int i = 0; i < _bodies.size(); i++)
 	{
-		printParticle(_particles[i]);
+		printBody(_bodies[i]);
+	}
+}
+
+void Universe::resetTree() {
+	double len = 10000;
+	Octant* o = new Octant(Vector3(-1 * len, -1 * len, -1 * len), 2 * len);
+	_root = new BarnesHutTree(o);
+}
+
+void Universe::fillTree() {
+	for (int i = 0; i < _bodies.size(); i++) {
+		_root->insert(_bodies[i]);
 	}
 }
 
 void Universe::update()
 {
-	physics::evolve(_particles, collisionMode);
+	resetTree();
+	fillTree();
+	
+	physics::evolve(_bodies, collisionMode);
 
 	printUniverse();
 }

@@ -1,7 +1,8 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include "particle.h"
+#include "body.h"
+#include "barneshuttree.h"
 #include "vector3.h"
 
 #include <cmath>
@@ -17,7 +18,7 @@ namespace physics {
     extern double dt;
     extern double G;
 
-    void evolve(std::vector<Particle*>& p, CollisionMode mode);
+    void evolve(std::vector<Body*>& v, CollisionMode mode);
 }
 
 #endif

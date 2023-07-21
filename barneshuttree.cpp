@@ -6,6 +6,19 @@ BarnesHutTree::BarnesHutTree(Octant* o) {
     for (int i = 0; i < 8; i++) _children[i] = NULL;
 }
 
+BarnesHutTree::~BarnesHutTree() {
+    destroyRecursive(this);
+}
+
+void BarnesHutTree::destroyRecursive(BarnesHutTree* tree) {
+    if (tree) {
+        for (int i = 0; i < 8; i++) {
+            destroyRecursive(_children[i]);
+        }
+        delete tree;
+    }
+}
+
 /*
 * Insert inputted body into the Barnes-Hut tree.
 * Recursively break into smaller Barnes-Hut trees such that all

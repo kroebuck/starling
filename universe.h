@@ -1,7 +1,9 @@
 #ifndef UNIVERSE_H
 #define UNIVERSE_H
 
-#include "particle.h"
+#include "body.h"
+#include "octant.h"
+#include "barneshuttree.h"
 #include "physics.h"
 #include "vector3.h"
 
@@ -17,15 +19,18 @@ public:
 	physics::CollisionMode collisionMode;
 	int _dim;
     double _max = 0.0;
-	std::vector<Particle*> _particles;
+	std::vector<Body*> _bodies;
+	BarnesHutTree* _root;
 
 	Universe();
 	~Universe();
 
 	void add(double m, double x, double y, double z, double vx, double vy, double vz);
 	void addFromFile(std::string filename);
-	void printParticle(Particle* b);
+	void printBody(Body* b);
 	void printUniverse();
+	void resetTree();
+	void fillTree();
 	void update();
 };
 
